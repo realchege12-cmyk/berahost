@@ -1,0 +1,13 @@
+import { useEffect, useState } from "react";
+import { CreditCard, History, CheckCircle2, Clock, XCircle } from "lucide-react";
+import { apiFetch } from "@/lib/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Link } from "wouter";
+
+export default function PaymentsPage() {
+  const [payments, setPayments] = useState<any[]>([]);
+  useEffect(() => { apiFetch("/api/payments/history").then(setPayments).catch(() => setPayments([])); }, []);
+  const statusIcon = (status: string) => status === "success" ? <CheckCircle2 className="h-4 w-4 text-accent" /> : status === "failed" ? <XCircle className="h-4 w-4 text-destructive" /> : <Clock className="h-4 w-4 text-yellow-400" />;
+  return <div className="space-y-8"><div><p className="text-xs font-mono uppercase tracking-[0.2em] text-primary">BILLING LEDGER</p><h1 className="mt-2 text-3xl font-black">Subscription payments</h1><p className="mt-2 text-muted-foreground">All monthly plan and custom-domain payments are processed through PayHero M-Pesa.</p></div><Card><CardHeader><CardTitle className="flex items-center gap-2"><History className="h-5 w-5 text-primary" /> Payment history</CardTitle></CardHeader><CardContent>{payments.length === 0 ? <div className="py-10 text-center text-muted-foreground">No payment transactions yet. <Link href="/subscriptions" className="text-primary hover:underline">View subscription plans</Link>.</div> : <div className="space-y-3">{payments.map((payment) => <div key={payment.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/50 bg-background/30 p-4"><div className="flex items-center gap-3">{statusIcon(payment.status)}<div><p className="font-semibold">{payment.package?.startsWith("sub:") ? `${payment.package.slice(4)} monthly subscription` : payment.package?.startsWith("domain:") ? "Custom domain request" : "Hosting payment"}</p><p className="text-xs text-muted-foreground">{new Date(payment.createdAt).toLocaleString()} · {payment.phone || "M-Pesa"}</p></div></div><div className="flex items-center gap-3"><span className="font-mono font-bold">KES {payment.amountKes}</span><Badge variant="outline" className="uppercase">{payment.status}</Badge></div></div>)}</div>}</CardContent></Card><Card className="border-primary/20 bg-primary/[0.03]"><CardContent className="flex items-start gap-3 p-5"><CreditCard className="mt-0.5 h-5 w-5 text-primary" /><p className="text-sm text-muted-foreground">Subscriptions run for 30 days. When a subscription ends, bot and web runtimes stop automatically but their records remain stored until you renew.</p></CardContent></Card></div>;
+}

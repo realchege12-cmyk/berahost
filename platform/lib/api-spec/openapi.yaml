@@ -1,0 +1,1908 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: BERAHOST API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication
+  - name: bots
+    description: Bot marketplace
+  - name: deployments
+    description: Bot deployments
+  - name: coins
+    description: Coin economy
+  - name: payments
+    description: PayHero payments
+  - name: subscriptions
+    description: Subscription plans
+  - name: admin
+    description: Admin operations
+  - name: support
+    description: Support tickets
+  - name: apikeys
+    description: API key management
+  - name: notifications
+    description: Notifications
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  # AUTH
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register new account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/profile:
+    put:
+      operationId: updateProfile
+      tags: [auth]
+      summary: Update display name, avatar, and phone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/change-password:
+    post:
+      operationId: changePassword
+      tags: [auth]
+      summary: Change password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  # BOTS
+  /bots:
+    get:
+      operationId: listBots
+      tags: [bots]
+      summary: List all available bots
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bot"
+
+  /bots/{id}:
+    get:
+      operationId: getBot
+      tags: [bots]
+      summary: Get bot details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bot"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # DEPLOYMENTS
+  /deployments:
+    get:
+      operationId: listDeployments
+      tags: [deployments]
+      summary: List user's deployments
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Deployment"
+    post:
+      operationId: createDeployment
+      tags: [deployments]
+      summary: Deploy new bot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDeploymentBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deployment"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /deployments/{id}:
+    get:
+      operationId: getDeployment
+      tags: [deployments]
+      summary: Get deployment details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deployment"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteDeployment
+      tags: [deployments]
+      summary: Delete deployment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /deployments/{id}/start:
+    post:
+      operationId: startDeployment
+      tags: [deployments]
+      summary: Start stopped bot
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deployment"
+
+  /deployments/{id}/stop:
+    post:
+      operationId: stopDeployment
+      tags: [deployments]
+      summary: Stop running bot
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deployment"
+
+  /deployments/{id}/env:
+    put:
+      operationId: updateDeploymentEnv
+      tags: [deployments]
+      summary: Update deployment env vars (SESSION_ID locked)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEnvBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deployment"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /deployments/{id}/logs:
+    get:
+      operationId: getDeploymentLogs
+      tags: [deployments]
+      summary: Get recent deployment logs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BotLog"
+
+  # COINS
+  /coins/balance:
+    get:
+      operationId: getCoinBalance
+      tags: [coins]
+      summary: Get user coin balance
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CoinBalance"
+
+  /coins/transactions:
+    get:
+      operationId: listCoinTransactions
+      tags: [coins]
+      summary: List coin transaction history
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CoinTransaction"
+
+  /coins/redeem:
+    post:
+      operationId: redeemVoucher
+      tags: [coins]
+      summary: Redeem gift code or voucher
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RedeemVoucherBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RedeemResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /coins/daily-claim:
+    post:
+      operationId: claimDailyBonus
+      tags: [coins]
+      summary: Claim daily bonus coins
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DailyClaimResponse"
+        "400":
+          description: Already claimed today
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # PAYMENTS
+  /payments/initiate:
+    post:
+      operationId: initiatePayment
+      tags: [payments]
+      summary: Initiate STK push payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InitiatePaymentBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /payments/callback:
+    post:
+      operationId: paymentCallback
+      tags: [payments]
+      summary: PayHero webhook callback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /payments/history:
+    get:
+      operationId: listPayments
+      tags: [payments]
+      summary: List payment history
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PaymentTransaction"
+
+  # SUBSCRIPTIONS
+  /subscriptions/plans:
+    get:
+      operationId: listSubscriptionPlans
+      tags: [subscriptions]
+      summary: List available subscription plans
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubscriptionPlan"
+
+  /subscriptions/status:
+    get:
+      operationId: getSubscriptionStatus
+      tags: [subscriptions]
+      summary: Get current subscription
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubscriptionStatus"
+
+  /subscriptions/subscribe:
+    post:
+      operationId: subscribeToPlan
+      tags: [subscriptions]
+      summary: Subscribe to plan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscribeBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  # NOTIFICATIONS
+  /notifications:
+    get:
+      operationId: listNotifications
+      tags: [notifications]
+      summary: List user notifications
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+  /notifications/{id}/read:
+    post:
+      operationId: markNotificationRead
+      tags: [notifications]
+      summary: Mark notification as read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  # SUPPORT
+  /support/tickets:
+    get:
+      operationId: listSupportTickets
+      tags: [support]
+      summary: List user's support tickets
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SupportTicket"
+    post:
+      operationId: createSupportTicket
+      tags: [support]
+      summary: Create support ticket
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTicketBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SupportTicket"
+
+  /support/tickets/{id}/messages:
+    get:
+      operationId: getTicketMessages
+      tags: [support]
+      summary: Get ticket conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TicketMessage"
+    post:
+      operationId: replyToTicket
+      tags: [support]
+      summary: Reply to ticket
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TicketReplyBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TicketMessage"
+
+  # API KEYS
+  /api-keys:
+    get:
+      operationId: listApiKeys
+      tags: [apikeys]
+      summary: List API keys
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ApiKey"
+    post:
+      operationId: createApiKey
+      tags: [apikeys]
+      summary: Generate API key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateApiKeyBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyCreated"
+
+  /api-keys/{id}:
+    delete:
+      operationId: revokeApiKey
+      tags: [apikeys]
+      summary: Revoke API key
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  # ADMIN
+  /admin/stats:
+    get:
+      operationId: getAdminStats
+      tags: [admin]
+      summary: Get admin dashboard stats
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStats"
+
+  /admin/revenue-chart:
+    get:
+      operationId: getRevenueChart
+      tags: [admin]
+      summary: Get revenue chart data (last 30 days)
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RevenueDataPoint"
+
+  /admin/users:
+    get:
+      operationId: adminListUsers
+      tags: [admin]
+      summary: List all users
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+
+  /admin/users/{id}/ban:
+    post:
+      operationId: adminBanUser
+      tags: [admin]
+      summary: Ban or unban user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BanUserBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /admin/users/{id}/coins:
+    post:
+      operationId: adminAdjustCoins
+      tags: [admin]
+      summary: Adjust user coin balance
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdjustCoinsBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /admin/deployments:
+    get:
+      operationId: adminListDeployments
+      tags: [admin]
+      summary: List all deployments across all users
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AdminDeployment"
+
+  /admin/deployments/{id}/stop:
+    post:
+      operationId: adminStopDeployment
+      tags: [admin]
+      summary: Force stop any deployment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /admin/bots:
+    get:
+      operationId: adminListBots
+      tags: [admin]
+      summary: List all bot templates
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bot"
+    post:
+      operationId: adminCreateBot
+      tags: [admin]
+      summary: Create bot template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBotBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bot"
+
+  /admin/bots/{id}:
+    put:
+      operationId: adminUpdateBot
+      tags: [admin]
+      summary: Update bot template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBotBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bot"
+    delete:
+      operationId: adminDeleteBot
+      tags: [admin]
+      summary: Delete bot template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /admin/vouchers:
+    get:
+      operationId: adminListVouchers
+      tags: [admin]
+      summary: List vouchers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Voucher"
+    post:
+      operationId: adminCreateVoucher
+      tags: [admin]
+      summary: Create voucher
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateVoucherBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Voucher"
+
+  /admin/audit-logs:
+    get:
+      operationId: adminListAuditLogs
+      tags: [admin]
+      summary: List audit logs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AuditLog"
+
+  /admin/settings:
+    get:
+      operationId: adminGetSettings
+      tags: [admin]
+      summary: Get platform settings
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      operationId: adminUpdateSettings
+      tags: [admin]
+      summary: Update platform settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /admin/broadcasts:
+    post:
+      operationId: adminSendBroadcast
+      tags: [admin]
+      summary: Send mass notification to all users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BroadcastBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /admin/support/tickets:
+    get:
+      operationId: adminListSupportTickets
+      tags: [admin]
+      summary: List all support tickets
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SupportTicket"
+
+  /admin/support/tickets/{id}/reply:
+    post:
+      operationId: adminReplyToTicket
+      tags: [admin]
+      summary: Admin reply to ticket
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TicketReplyBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TicketMessage"
+
+  /admin/users/{id}/override-session:
+    post:
+      operationId: adminOverrideSession
+      tags: [admin]
+      summary: Admin override SESSION_ID (abuse cases only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OverrideSessionBody"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        displayName:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        phone:
+          type: ["string", "null"]
+        coins:
+          type: integer
+        isVerified:
+          type: boolean
+        isBanned:
+          type: boolean
+        isAdmin:
+          type: boolean
+        referralCode:
+          type: ["string", "null"]
+        subscriptionPlan:
+          type: string
+        subscriptionExpiresAt:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - email
+        - coins
+        - isVerified
+        - isBanned
+        - isAdmin
+        - subscriptionPlan
+        - createdAt
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        message:
+          type: string
+      required:
+        - user
+        - message
+
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        phone:
+          type: ["string", "null"]
+        referralCode:
+          type: ["string", "null"]
+      required:
+        - email
+        - password
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    UpdateProfileBody:
+      type: object
+      properties:
+        displayName:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        phone:
+          type: ["string", "null"]
+
+    ChangePasswordBody:
+      type: object
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+      required:
+        - currentPassword
+        - newPassword
+
+    Bot:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        repoUrl:
+          type: string
+        description:
+          type: ["string", "null"]
+        platform:
+          type: string
+        isFeatured:
+          type: boolean
+        requiredVars:
+          type: ["object", "null"]
+        optionalVars:
+          type: ["object", "null"]
+        sessionGuideUrl:
+          type: ["string", "null"]
+        systemDeps:
+          type: ["array", "null"]
+          items:
+            type: string
+        startCommand:
+          type: ["string", "null"]
+        version:
+          type: integer
+        createdAt:
+          type: string
+      required:
+        - id
+        - name
+        - repoUrl
+        - platform
+        - isFeatured
+        - version
+        - createdAt
+
+    CreateBotBody:
+      type: object
+      properties:
+        name:
+          type: string
+        repoUrl:
+          type: string
+        description:
+          type: ["string", "null"]
+        platform:
+          type: string
+        isFeatured:
+          type: boolean
+        requiredVars:
+          type: ["object", "null"]
+        optionalVars:
+          type: ["object", "null"]
+        sessionGuideUrl:
+          type: ["string", "null"]
+        systemDeps:
+          type: ["array", "null"]
+          items:
+            type: string
+        startCommand:
+          type: ["string", "null"]
+      required:
+        - name
+        - repoUrl
+        - platform
+
+    Deployment:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        botId:
+          type: integer
+        containerId:
+          type: ["string", "null"]
+        pid:
+          type: ["integer", "null"]
+        envVars:
+          type: ["object", "null"]
+        sessionIdLocked:
+          type: boolean
+        status:
+          type: string
+        platform:
+          type: ["string", "null"]
+        customName:
+          type: ["string", "null"]
+        lastActive:
+          type: ["string", "null"]
+        storageUsedMb:
+          type: integer
+        storageLimitMb:
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: ["string", "null"]
+        bot:
+          $ref: "#/components/schemas/Bot"
+      required:
+        - id
+        - userId
+        - botId
+        - sessionIdLocked
+        - status
+        - storageUsedMb
+        - storageLimitMb
+        - createdAt
+        - bot
+
+    AdminDeployment:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        botId:
+          type: integer
+        containerId:
+          type: ["string", "null"]
+        pid:
+          type: ["integer", "null"]
+        status:
+          type: string
+        platform:
+          type: ["string", "null"]
+        storageUsedMb:
+          type: integer
+        createdAt:
+          type: string
+        user:
+          type: object
+          properties:
+            email:
+              type: string
+          required:
+            - email
+        bot:
+          type: object
+          properties:
+            name:
+              type: string
+          required:
+            - name
+      required:
+        - id
+        - userId
+        - botId
+        - status
+        - storageUsedMb
+        - createdAt
+        - user
+        - bot
+
+    CreateDeploymentBody:
+      type: object
+      properties:
+        botId:
+          type: integer
+        envVars:
+          type: object
+        customName:
+          type: ["string", "null"]
+      required:
+        - botId
+        - envVars
+
+    UpdateEnvBody:
+      type: object
+      properties:
+        envVars:
+          type: object
+      required:
+        - envVars
+
+    BotLog:
+      type: object
+      properties:
+        id:
+          type: integer
+        deploymentId:
+          type: integer
+        logLine:
+          type: string
+        logType:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - deploymentId
+        - logLine
+        - logType
+        - createdAt
+
+    CoinBalance:
+      type: object
+      properties:
+        coins:
+          type: integer
+        streak:
+          type: integer
+        canClaimToday:
+          type: boolean
+      required:
+        - coins
+        - streak
+        - canClaimToday
+
+    CoinTransaction:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        amount:
+          type: integer
+        type:
+          type: string
+        reference:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - amount
+        - type
+        - createdAt
+
+    RedeemVoucherBody:
+      type: object
+      properties:
+        code:
+          type: string
+      required:
+        - code
+
+    RedeemResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        coinsAwarded:
+          type: integer
+        newBalance:
+          type: integer
+      required:
+        - message
+        - coinsAwarded
+        - newBalance
+
+    DailyClaimResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        coinsAwarded:
+          type: integer
+        streakDays:
+          type: integer
+        newBalance:
+          type: integer
+      required:
+        - message
+        - coinsAwarded
+        - streakDays
+        - newBalance
+
+    InitiatePaymentBody:
+      type: object
+      properties:
+        phone:
+          type: string
+        package:
+          type: string
+      required:
+        - phone
+        - package
+
+    PaymentResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        transactionId:
+          type: integer
+        package:
+          type: string
+        amountKes:
+          type: integer
+        coinsToAward:
+          type: integer
+      required:
+        - message
+        - transactionId
+        - package
+        - amountKes
+        - coinsToAward
+
+    PaymentTransaction:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        payheroTxnId:
+          type: ["string", "null"]
+        phone:
+          type: ["string", "null"]
+        amountKes:
+          type: ["integer", "null"]
+        coinsAwarded:
+          type: ["integer", "null"]
+        package:
+          type: ["string", "null"]
+        status:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - status
+        - createdAt
+
+    SubscriptionPlan:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        priceKes:
+          type: integer
+        coinsPerMonth:
+          type: integer
+        maxBots:
+          type: ["integer", "null"]
+        features:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - name
+        - priceKes
+        - coinsPerMonth
+        - features
+
+    SubscriptionStatus:
+      type: object
+      properties:
+        plan:
+          type: string
+        expiresAt:
+          type: ["string", "null"]
+        isActive:
+          type: boolean
+        coinsThisMonth:
+          type: integer
+      required:
+        - plan
+        - isActive
+        - coinsThisMonth
+
+    SubscribeBody:
+      type: object
+      properties:
+        plan:
+          type: string
+        phone:
+          type: string
+      required:
+        - plan
+        - phone
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+        isRead:
+          type: boolean
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - title
+        - message
+        - isRead
+        - createdAt
+
+    SupportTicket:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        subject:
+          type: string
+        status:
+          type: string
+        priority:
+          type: string
+        adminReply:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        closedAt:
+          type: ["string", "null"]
+      required:
+        - id
+        - userId
+        - subject
+        - status
+        - priority
+        - createdAt
+
+    CreateTicketBody:
+      type: object
+      properties:
+        subject:
+          type: string
+        message:
+          type: string
+        priority:
+          type: string
+      required:
+        - subject
+        - message
+
+    TicketMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        ticketId:
+          type: integer
+        userId:
+          type: integer
+        message:
+          type: string
+        isAdmin:
+          type: boolean
+        createdAt:
+          type: string
+      required:
+        - id
+        - ticketId
+        - userId
+        - message
+        - isAdmin
+        - createdAt
+
+    TicketReplyBody:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    ApiKey:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        name:
+          type: ["string", "null"]
+        scopes:
+          type: ["array", "null"]
+          items:
+            type: string
+        lastUsed:
+          type: ["string", "null"]
+        expiresAt:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - createdAt
+
+    CreateApiKeyBody:
+      type: object
+      properties:
+        name:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        expiresAt:
+          type: ["string", "null"]
+      required:
+        - name
+
+    ApiKeyCreated:
+      type: object
+      properties:
+        id:
+          type: integer
+        key:
+          type: string
+        name:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - key
+        - createdAt
+
+    AdminStats:
+      type: object
+      properties:
+        totalUsers:
+          type: integer
+        activeBots:
+          type: integer
+        coinsInCirculation:
+          type: integer
+        todayRevenue:
+          type: integer
+        totalDeployments:
+          type: integer
+        openTickets:
+          type: integer
+      required:
+        - totalUsers
+        - activeBots
+        - coinsInCirculation
+        - todayRevenue
+        - totalDeployments
+        - openTickets
+
+    RevenueDataPoint:
+      type: object
+      properties:
+        date:
+          type: string
+        revenue:
+          type: integer
+      required:
+        - date
+        - revenue
+
+    BanUserBody:
+      type: object
+      properties:
+        banned:
+          type: boolean
+        reason:
+          type: ["string", "null"]
+      required:
+        - banned
+
+    AdjustCoinsBody:
+      type: object
+      properties:
+        amount:
+          type: integer
+        reason:
+          type: string
+      required:
+        - amount
+        - reason
+
+    Voucher:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        coinValue:
+          type: integer
+        maxUses:
+          type: integer
+        usedCount:
+          type: integer
+        expiresAt:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - code
+        - coinValue
+        - maxUses
+        - usedCount
+        - createdAt
+
+    CreateVoucherBody:
+      type: object
+      properties:
+        code:
+          type: string
+        coinValue:
+          type: integer
+        maxUses:
+          type: integer
+        expiresAt:
+          type: ["string", "null"]
+      required:
+        - code
+        - coinValue
+        - maxUses
+
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: integer
+        adminId:
+          type: integer
+        action:
+          type: string
+        details:
+          type: ["object", "null"]
+        ipAddress:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - adminId
+        - action
+        - createdAt
+
+    BroadcastBody:
+      type: object
+      properties:
+        title:
+          type: string
+        message:
+          type: string
+      required:
+        - title
+        - message
+
+    OverrideSessionBody:
+      type: object
+      properties:
+        deploymentId:
+          type: integer
+        newSessionId:
+          type: string
+        reason:
+          type: string
+      required:
+        - deploymentId
+        - newSessionId
+        - reason

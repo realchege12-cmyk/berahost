@@ -1,0 +1,74 @@
+[
+  {
+    "id": "a1b2c3d4-0001-4e5f-8a9b-c0d1e2f30001",
+    "position": 1,
+    "filepath": "src/pages/slides/Slide01Title.tsx",
+    "title": "BERAHOST",
+    "description": "Title slide — platform overview with API request/response example",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0002-4e5f-8a9b-c0d1e2f30002",
+    "position": 2,
+    "filepath": "src/pages/slides/Slide02Problem.tsx",
+    "title": "The Problem",
+    "description": "Three core challenges: session loss, no visibility, ops overhead",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0003-4e5f-8a9b-c0d1e2f30003",
+    "position": 3,
+    "filepath": "src/pages/slides/Slide03Marketplace.tsx",
+    "title": "Bot Marketplace",
+    "description": "Pre-vetted bot templates ready for instant deployment",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0004-4e5f-8a9b-c0d1e2f30004",
+    "position": 4,
+    "filepath": "src/pages/slides/Slide04DeployEngine.tsx",
+    "title": "Deployment Engine",
+    "description": "Auto-dependency detection, port allocation, crash recovery, pairing codes",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0005-4e5f-8a9b-c0d1e2f30005",
+    "position": 5,
+    "filepath": "src/pages/slides/Slide05Session.tsx",
+    "title": "Session Persistence",
+    "description": "Full Baileys session backup, pre-key preservation, SQLite injection",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0006-4e5f-8a9b-c0d1e2f30006",
+    "position": 6,
+    "filepath": "src/pages/slides/Slide06Console.tsx",
+    "title": "Live Console",
+    "description": "Real-time stdout/stderr streaming, CPU/RAM metrics, log export",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0007-4e5f-8a9b-c0d1e2f30007",
+    "position": 7,
+    "filepath": "src/pages/slides/Slide07Plans.tsx",
+    "title": "Plans & Economy",
+    "description": "Tiered plans from Free to Enterprise, coin system, voucher codes",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0008-4e5f-8a9b-c0d1e2f30008",
+    "position": 8,
+    "filepath": "src/pages/slides/Slide08Stack.tsx",
+    "title": "Stack",
+    "description": "Frontend: React/Vite/Tailwind. Backend: Node/Express/Socket.io/PostgreSQL",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a1b2c3d4-0009-4e5f-8a9b-c0d1e2f30009",
+    "position": 9,
+    "filepath": "src/pages/slides/Slide09GetStarted.tsx",
+    "title": "Get Started",
+    "description": "Closing slide — tagline and berahost.app URL",
+    "speakerNotes": ""
+  }
+]

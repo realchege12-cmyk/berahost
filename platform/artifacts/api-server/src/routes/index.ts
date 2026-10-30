@@ -1,0 +1,48 @@
+import { Router, type IRouter } from "express";
+import healthRouter from "./health";
+import authRouter from "./auth";
+import botsRouter from "./bots";
+import deploymentsRouter from "./deployments";
+import coinsRouter from "./coins";
+import paymentsRouter from "./payments";
+import subscriptionsRouter from "./subscriptions";
+import notificationsRouter from "./notifications";
+import supportRouter from "./support";
+import apikeysRouter from "./apikeys";
+import adminRouter from "./admin";
+import sessionsRouter from "./sessions";
+import marketplaceRouter from "./marketplace";
+import teamsRouter from "./teams";
+import githubRouter from "./github";
+import leaderboardRouter from "./leaderboard";
+import scheduledRouter from "./scheduled";
+import logsearchRouter from "./logsearch";
+import referralsRouter from "./referrals";
+import guideRouter from "./guide";
+import webDeploymentsRouter from "./webDeployments";
+
+const router: IRouter = Router();
+
+router.use(healthRouter);
+router.use(authRouter);
+router.use(botsRouter);
+router.use(deploymentsRouter);
+router.use(webDeploymentsRouter);
+router.use(coinsRouter);
+router.use(paymentsRouter);
+router.use(subscriptionsRouter);
+router.use(notificationsRouter);
+router.use(supportRouter);
+router.use(apikeysRouter);
+router.use(adminRouter);
+router.use(sessionsRouter);
+router.use(marketplaceRouter);
+router.use(teamsRouter);
+router.use(githubRouter);
+router.use(leaderboardRouter);
+router.use(scheduledRouter);
+router.use(logsearchRouter);
+router.use(referralsRouter);
+router.use(guideRouter);
+
+export default router;

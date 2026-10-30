@@ -1,0 +1,33 @@
+[Unit]
+Description=Berahost cgroup v2 resource manager
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/berahost-resource-manager
+ExecStart=/usr/bin/python3 /opt/berahost-resource-manager/resource_manager.py
+Restart=on-failure
+RestartSec=2
+UMask=0077
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=strict
+ReadOnlyPaths=/proc
+ReadWritePaths=/sys/fs/cgroup
+ReadOnlyPaths=/etc/berahost-resource-manager.token
+RestrictAddressFamilies=AF_INET AF_UNIX
+CapabilityBoundingSet=CAP_DAC_OVERRIDE CAP_DAC_READ_SEARCH CAP_SYS_ADMIN
+AmbientCapabilities=
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=no
+
+[Install]
+WantedBy=multi-user.target

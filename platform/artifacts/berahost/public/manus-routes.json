@@ -1,0 +1,128 @@
+{
+  "routes": [
+    {
+      "path": "/",
+      "title": "Home"
+    },
+    {
+      "path": "/login",
+      "title": "Login"
+    },
+    {
+      "path": "/register",
+      "title": "Register"
+    },
+    {
+      "path": "/dashboard",
+      "title": "Dashboard"
+    },
+    {
+      "path": "/bots",
+      "title": "Bot Marketplace"
+    },
+    {
+      "path": "/bots/:id",
+      "title": "Bot Details"
+    },
+    {
+      "path": "/deployments",
+      "title": "Deployments"
+    },
+    {
+      "path": "/deployments/:id",
+      "title": "Deployment Console"
+    },
+    {
+      "path": "/web-deployments",
+      "title": "Web Hosting"
+    },
+    {
+      "path": "/payments",
+      "title": "Payments"
+    },
+    {
+      "path": "/subscriptions",
+      "title": "Subscriptions"
+    },
+    {
+      "path": "/notifications",
+      "title": "Notifications"
+    },
+    {
+      "path": "/support",
+      "title": "Support"
+    },
+    {
+      "path": "/support/:id",
+      "title": "Support Ticket"
+    },
+    {
+      "path": "/api-keys",
+      "title": "API Keys"
+    },
+    {
+      "path": "/settings",
+      "title": "Settings"
+    },
+    {
+      "path": "/teams",
+      "title": "Teams"
+    },
+    {
+      "path": "/leaderboard",
+      "title": "Leaderboard"
+    },
+    {
+      "path": "/github",
+      "title": "GitHub Integration"
+    },
+    {
+      "path": "/submit-bot",
+      "title": "Submit Bot"
+    },
+    {
+      "path": "/referrals",
+      "title": "Referrals"
+    },
+    {
+      "path": "/admin/marketplace",
+      "title": "Admin Marketplace"
+    },
+    {
+      "path": "/admin",
+      "title": "Admin Dashboard"
+    },
+    {
+      "path": "/admin/users",
+      "title": "Admin Users"
+    },
+    {
+      "path": "/admin/bots",
+      "title": "Admin Bots"
+    },
+    {
+      "path": "/admin/deployments",
+      "title": "Admin Deployments"
+    },
+    {
+      "path": "/admin/support",
+      "title": "Admin Support"
+    },
+    {
+      "path": "/admin/support/:id",
+      "title": "Admin Support Ticket"
+    },
+    {
+      "path": "/admin/audit-logs",
+      "title": "Admin Audit Logs"
+    },
+    {
+      "path": "/admin/settings",
+      "title": "Admin Settings"
+    },
+    {
+      "path": "/admin/payments",
+      "title": "Admin Payments"
+    }
+  ]
+}

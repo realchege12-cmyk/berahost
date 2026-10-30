@@ -1,0 +1,17 @@
+# Keep secrets and local data out of public commits.
+**/.env
+**/.env.*
+!**/.env.example
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.sql
+**/*.dump
+**/*.sqlite
+**/*.db
+**/node_modules/
+**/dist/
+**/build/
+**/coverage/
+**/.cache/
